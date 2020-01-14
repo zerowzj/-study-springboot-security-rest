@@ -1,4 +1,4 @@
-package study.springboot.security.rest.auth;
+package study.springboot.security.rest.support.utils;
 
 import com.google.common.base.Strings;
 

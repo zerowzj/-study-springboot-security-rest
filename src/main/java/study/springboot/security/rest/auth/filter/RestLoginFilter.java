@@ -8,7 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import study.springboot.security.rest.auth.TokenUtils;
+import study.springboot.security.rest.support.utils.TokenUtils;
 import study.springboot.security.rest.auth.details.CustomUserDetails;
 import study.springboot.security.rest.support.Results;
 import study.springboot.security.rest.support.utils.JsonUtils;

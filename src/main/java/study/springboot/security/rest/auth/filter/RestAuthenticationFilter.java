@@ -1,9 +1,8 @@
 package study.springboot.security.rest.auth.filter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.web.filter.OncePerRequestFilter;
-import study.springboot.security.rest.auth.TokenUtils;
+import study.springboot.security.rest.support.utils.TokenUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
