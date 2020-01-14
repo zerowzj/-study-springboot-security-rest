@@ -3,6 +3,7 @@ package study.springboot.security.rest.auth.filter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.web.filter.OncePerRequestFilter;
+import study.springboot.security.rest.auth.TokenUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -18,7 +19,8 @@ public class RestAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
-//        String token = request.getHeader(this.TOKEN_HEADER);
+        log.info("======> doFilterInternal");
+        String token = request.getHeader(TokenUtils.TOKEN_HEADER);
 //        final String auth_token_start = "Bearer ";
 //        if (Strings.isNotEmpty(token) && token.startsWith(auth_token_start)) {
 //            token = token.substring(auth_token_start.length());

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import study.springboot.security.rest.auth.entrypoint.JwtAuthenticationEntryPoint;
 import study.springboot.security.rest.auth.filter.RestAuthenticationFilter;
 import study.springboot.security.rest.auth.filter.RestLoginFilter;
@@ -56,9 +57,10 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
 //        //
         http.addFilter(new RestLoginFilter(authenticationManager()))
-                .addFilter(new RestAuthenticationFilter()).authorizeRequests()
+                .addFilterAfter(new RestAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authorizeRequests()
                 .anyRequest().fullyAuthenticated()
-                .mvcMatchers("/login").permitAll();
+                .mvcMatchers("/login", "/demo").permitAll();
     }
 
     @Override
