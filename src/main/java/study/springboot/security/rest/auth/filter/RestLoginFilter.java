@@ -8,11 +8,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import study.springboot.security.rest.support.utils.TokenUtils;
 import study.springboot.security.rest.auth.details.CustomUserDetails;
 import study.springboot.security.rest.support.Results;
 import study.springboot.security.rest.support.utils.JsonUtils;
 import study.springboot.security.rest.support.utils.ServletUtils;
+import study.springboot.security.rest.support.utils.TokenUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -40,12 +40,7 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         log.info("======> attemptAuthentication");
-        InputStream is = null;
-        try {
-            is = request.getInputStream();
-        } catch (Exception ex) {
-            log.error("", ex);
-        }
+        InputStream is = ServletUtils.getBodyStream(request);
         CustomUserDetails userDetails = JsonUtils.fromJson(is, CustomUserDetails.class);
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 userDetails.getUsername(),

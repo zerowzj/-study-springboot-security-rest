@@ -8,7 +8,7 @@ public class TokenUtils {
 
     public static final String TOKEN_HEADER = "UCan-Token";
 
-    public static boolean checkToken(HttpServletRequest request) {
+    public static boolean isExists(HttpServletRequest request) {
         String token = request.getHeader(TOKEN_HEADER);
         return Strings.isNullOrEmpty(token);
     }

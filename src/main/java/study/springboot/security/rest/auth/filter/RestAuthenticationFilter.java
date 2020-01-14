@@ -13,13 +13,15 @@ import java.io.IOException;
 @Slf4j
 public class RestAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String TOKEN_HEADER = "TOKEN";
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
         log.info("======> doFilterInternal");
+        if (!TokenUtils.isExists(request)) {
+            throw new RuntimeException("请先认证");
+        }
         String token = request.getHeader(TokenUtils.TOKEN_HEADER);
+        log.info("token={}", token);
 //        final String auth_token_start = "Bearer ";
 //        if (Strings.isNotEmpty(token) && token.startsWith(auth_token_start)) {
 //            token = token.substring(auth_token_start.length());
