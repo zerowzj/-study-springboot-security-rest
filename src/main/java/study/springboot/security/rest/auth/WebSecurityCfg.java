@@ -6,7 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -19,8 +21,8 @@ import study.springboot.security.rest.auth.filter.RestLoginFilter;
  * 通过SpringSecurity的配置，将JwtLoginFilter，JwtAuthFilter组合在一起
  */
 @Configuration
-//@EnableWebSecurity// 这个注解必须加，开启Security
-//@EnableGlobalMethodSecurity(prePostEnabled = true)//保证post之前的注解可以使用
+@EnableWebSecurity  //启用web安全检查
+//@EnableGlobalMethodSecurity(prePostEnabled = true) //启用全局方法的安全检查（预处理预授权的属性为true）
 public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -30,6 +32,18 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
+        http.csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers("/auth/**").permitAll()
+                .anyRequest().authenticated();
+        http.headers()
+                .frameOptions()
+                .sameOrigin()  // required to set for H2 else H2 Console will be blank.
+                .cacheControl();
+
         http
                 //禁用CSRF保护
                 .csrf().disable()
