@@ -10,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import study.springboot.security.rest.auth.TokenUtils;
 import study.springboot.security.rest.auth.details.CustomUserDetails;
 import study.springboot.security.rest.support.Results;
 import study.springboot.security.rest.support.utils.JsonUtils;
@@ -39,9 +40,6 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
         this.authenticationManager = authenticationManager;
     }
 
-    /**
-     * 接收并解析用户凭证
-     */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         log.info("======> attemptAuthentication");
@@ -59,9 +57,6 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
         return authenticationManager.authenticate(token);
     }
 
-    /**
-     * 用户登录成功后，这个方法会被调用，我们在这个方法里生成token
-     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
@@ -72,13 +67,10 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
                 .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
                 .signWith(SignatureAlgorithm.HS512, "MyJwtSecret")
                 .compact();
-        response.addHeader("Authorization", "Bearer " + token);
+        response.addHeader(TokenUtils.TOKEN_HEADER, token);
         ServletUtils.write(response, Results.ok(null));
     }
 
-    /**
-     * 用户成登录失败后
-     */
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException ex) throws IOException, ServletException {
