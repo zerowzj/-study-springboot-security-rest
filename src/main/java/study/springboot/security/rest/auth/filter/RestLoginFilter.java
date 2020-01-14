@@ -1,8 +1,6 @@
 package study.springboot.security.rest.auth.filter;
 
 import com.google.common.collect.Lists;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
 
 /**
  * 认证
@@ -62,12 +59,10 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
         log.info("======> successfulAuthentication");
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        String token = Jwts.builder()
-                .setSubject(userDetails.getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 24 * 1000))
-                .signWith(SignatureAlgorithm.HS512, "MyJwtSecret")
-                .compact();
+        String token = "sdfasdfs";
+        //
         response.addHeader(TokenUtils.TOKEN_HEADER, token);
+        //
         ServletUtils.write(response, Results.ok(null));
     }
 
