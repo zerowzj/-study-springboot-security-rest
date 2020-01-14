@@ -1,0 +1,13 @@
+#
+server:
+  port: 9000
+#
+logging:
+  config: classpath:logback.xml
+#
+spring:
+  application:
+    name: study-springboot-security-rest
+####################
+#
+####################
