@@ -14,8 +14,16 @@ public class Results {
 
     private static final String DATA_KEY = "data";
 
+    public static Map<String, Object> ok() {
+        return ok(null);
+    }
+
     public static Map<String, Object> ok(Map<String, Object> data) {
         return builtRst("0000", "成功", data);
+    }
+
+    public static Map<String, Object> error() {
+        return error("9999", "系统异常");
     }
 
     public static Map<String, Object> error(String code, String desc) {

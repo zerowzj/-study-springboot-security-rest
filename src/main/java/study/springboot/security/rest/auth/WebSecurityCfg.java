@@ -32,26 +32,37 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
+        //
         http.csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers("/auth/**").permitAll()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        //异常处理
+        http.exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
+        //
+        http.authorizeRequests()
+                .antMatchers("/login", "/demo").permitAll()
                 .anyRequest().authenticated();
-        http.headers()
-                .frameOptions()
-                .sameOrigin()  // required to set for H2 else H2 Console will be blank.
-                .cacheControl();
+        //
+        http.addFilterAt(new RestLoginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new RestAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers("/auth/**").permitAll()
+//                .anyRequest().authenticated();
+//        http.headers()
+//                .frameOptions()
+//                .sameOrigin()
+//                .cacheControl();
 
-        http
-                //禁用CSRF保护
-                .csrf().disable()
-                .authorizeRequests()
-                //任何访问都必须授权
-                .anyRequest().fullyAuthenticated()
-                //配置那些路径可以不用权限访问
-                .mvcMatchers("/login").permitAll()
+//        http
+//                //禁用CSRF保护
+//                .csrf().disable()
+//                .authorizeRequests()
+//                //任何访问都必须授权
+//                .anyRequest().fullyAuthenticated()
+//                //配置那些路径可以不用权限访问
+//                .mvcMatchers("/login").permitAll()
 //                .and()
 //                .formLogin()
 //                //登陆成功后的处理，因为是API的形式所以不用跳转页面
@@ -66,15 +77,11 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //                .exceptionHandling()
 //                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
         ;
-//        //异常处理
-//        http.exceptionHandling()
-//                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
+
+
 //        //
-        http.addFilter(new RestLoginFilter(authenticationManager()))
-                .addFilterAfter(new RestAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                .anyRequest().fullyAuthenticated()
-                .mvcMatchers("/login", "/demo").permitAll();
+
+
     }
 
     @Override

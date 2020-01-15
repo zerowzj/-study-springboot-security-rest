@@ -10,6 +10,6 @@ public class TokenUtils {
 
     public static boolean isExists(HttpServletRequest request) {
         String token = request.getHeader(TOKEN_HEADER);
-        return Strings.isNullOrEmpty(token);
+        return !Strings.isNullOrEmpty(token);
     }
 }
