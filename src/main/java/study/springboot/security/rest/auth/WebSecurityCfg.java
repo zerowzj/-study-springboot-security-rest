@@ -46,11 +46,11 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         //异常处理
-        http.exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
+//        http.exceptionHandling()
+//                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
         //
         http.authorizeRequests()
-                .antMatchers("/login", "/demo").permitAll()
+               // .antMatchers("/login", "/demo").permitAll()
                 .anyRequest().authenticated();
         //
         http.addFilterAt(new RestLoginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
