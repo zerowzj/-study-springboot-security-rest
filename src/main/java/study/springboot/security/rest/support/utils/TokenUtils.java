@@ -12,4 +12,9 @@ public class TokenUtils {
         String token = request.getHeader(TOKEN_HEADER);
         return !Strings.isNullOrEmpty(token);
     }
+
+    public static String getToken(HttpServletRequest request) {
+        String token = request.getHeader(TOKEN_HEADER);
+        return token;
+    }
 }
