@@ -49,9 +49,9 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
         http.exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint);
         //
-        http.authorizeRequests()
-               // .antMatchers("/login", "/demo").permitAll()
-                .anyRequest().authenticated();
+//        http.authorizeRequests()
+//               // .antMatchers("/login", "/demo").permitAll()
+//                .anyRequest().authenticated();
         //
         http.addFilterAt(new RestLoginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new RestAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

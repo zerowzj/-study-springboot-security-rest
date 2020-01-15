@@ -1,6 +1,8 @@
 package study.springboot.security.rest.auth.filter;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.filter.OncePerRequestFilter;
 import study.springboot.security.rest.support.utils.TokenUtils;
 
@@ -10,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ *
+ */
 @Slf4j
 public class RestAuthenticationFilter extends OncePerRequestFilter {
 
@@ -18,7 +23,7 @@ public class RestAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain chain) throws ServletException, IOException {
         log.info("======> doFilterInternal");
         if (!TokenUtils.isExists(request)) {
-            throw new RuntimeException("请先认证");
+            throw new AuthenticationCredentialsNotFoundException("123123");
         }
         String token = request.getHeader(TokenUtils.TOKEN_HEADER);
         log.info("token={}", token);
