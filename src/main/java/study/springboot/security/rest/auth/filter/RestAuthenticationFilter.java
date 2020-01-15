@@ -1,7 +1,6 @@
 package study.springboot.security.rest.auth.filter;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.web.filter.OncePerRequestFilter;
 import study.springboot.security.rest.support.utils.TokenUtils;
 
@@ -22,7 +21,9 @@ public class RestAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain chain) throws ServletException, IOException {
         log.info("======> doFilterInternal");
         if (!TokenUtils.isLegal(request)) {
-            throw new AuthenticationCredentialsNotFoundException("123123");
+            chain.doFilter(request, response);
+//            throw new AuthenticationCredentialsNotFoundException("123123");
+            return;
         }
         String token = request.getHeader(TokenUtils.TOKEN_HEADER);
         log.info("token={}", token);
