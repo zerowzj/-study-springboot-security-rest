@@ -26,6 +26,10 @@ import study.springboot.security.rest.auth.filter.RestLoginFilter;
 //@EnableGlobalMethodSecurity(prePostEnabled = true) //启用全局方法的安全检查（预处理预授权的属性为true）
 public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
+    public WebSecurityCfg(){
+        super(true);
+    }
+
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
@@ -48,7 +52,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).disable();
         //异常处理（▲）ExceptionTranslationFilter
         http.exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint).disable();
         //（▲）FilterSecurityInterceptor
 //        http.authorizeRequests()
 //               // .antMatchers("/login", "/demo").permitAll()
@@ -60,7 +64,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
         http.headers()
                 .frameOptions()
                 .sameOrigin()
-                .cacheControl();
+                .cacheControl().disable();
         //（▲）LogoutFilter
         http.logout().disable();
         //（▲）AnonymousAuthenticationFilter
