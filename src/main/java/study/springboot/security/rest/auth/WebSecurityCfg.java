@@ -45,7 +45,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         //会话管理（▲）SessionManagementFilter
         http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).disable();
         //异常处理（▲）ExceptionTranslationFilter
         http.exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint);
@@ -63,6 +63,8 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
                 .cacheControl();
         //（▲）LogoutFilter
         http.logout().disable();
+        //（▲）AnonymousAuthenticationFilter
+        http.anonymous().disable();
     }
 
     @Override
