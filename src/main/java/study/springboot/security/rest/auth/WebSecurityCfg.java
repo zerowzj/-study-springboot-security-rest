@@ -36,7 +36,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
         web.debug(true);
         //
         web.ignoring()
-                .antMatchers("/login", "/demo");
+                .antMatchers("/demo");
     }
 
     @Override
