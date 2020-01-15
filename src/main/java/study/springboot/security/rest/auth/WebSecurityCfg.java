@@ -55,8 +55,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
                 .disable();
         //异常处理（▲）ExceptionTranslationFilter
         http.exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .disable();
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
         //（▲）FilterSecurityInterceptor
 //        http.authorizeRequests()
 //               // .antMatchers("/login", "/demo").permitAll()
