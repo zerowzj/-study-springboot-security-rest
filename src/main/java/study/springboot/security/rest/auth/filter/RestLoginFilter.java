@@ -58,7 +58,7 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
         //
         response.addHeader(TokenUtils.TOKEN_HEADER, token);
         //
-        ServletUtils.write(response, Results.ok(null));
+        ServletUtils.write(response, Results.ok());
     }
 
     @Override
