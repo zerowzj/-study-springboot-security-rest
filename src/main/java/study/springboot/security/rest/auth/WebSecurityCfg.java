@@ -34,6 +34,9 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.debug(true);
+        //
+        web.ignoring()
+                .antMatchers("/login", "/demo");
     }
 
     @Override
