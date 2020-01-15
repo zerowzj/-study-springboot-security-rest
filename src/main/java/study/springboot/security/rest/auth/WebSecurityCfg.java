@@ -41,14 +41,15 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        //禁用CSRF保护
-        http.csrf().disable()
-                .sessionManagement()
+        //CSRF保护（▲）CsrfFilter
+        http.csrf().disable();
+        //会话管理（▲）SessionManagementFilter
+        http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        //异常处理
+        //异常处理（▲）ExceptionTranslationFilter
         http.exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint);
-        //
+        //（▲）FilterSecurityInterceptor
 //        http.authorizeRequests()
 //               // .antMatchers("/login", "/demo").permitAll()
 //                .anyRequest().authenticated();
@@ -60,6 +61,8 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
                 .frameOptions()
                 .sameOrigin()
                 .cacheControl();
+        //（▲）LogoutFilter
+        http.logout().disable();
     }
 
     @Override
