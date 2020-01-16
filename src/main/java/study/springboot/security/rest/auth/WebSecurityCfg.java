@@ -32,7 +32,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
-    private RestAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
@@ -72,7 +72,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
         http.anonymous();
         //（▲）ExceptionTranslationFilter
         http.exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
+                .authenticationEntryPoint(restAuthenticationEntryPoint);
     }
 
     @Override

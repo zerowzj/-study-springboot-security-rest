@@ -12,6 +12,8 @@ public class DemoController {
 
     @GetMapping("/demo")
     public Map<String, Object> demo() {
-        return Results.ok();
+        Map<String, Object> data = Maps.newHashMap();
+        data.put("demo", "demo");
+        return Results.ok(data);
     }
 }
