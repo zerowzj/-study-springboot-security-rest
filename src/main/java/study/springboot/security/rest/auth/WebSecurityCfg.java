@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import study.springboot.security.rest.auth.entrypoint.RestAuthenticationEntryPoint;
 import study.springboot.security.rest.auth.filter.RestAuthenticationFilter;
 import study.springboot.security.rest.auth.filter.RestLoginFilter;
@@ -40,8 +39,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
         //
         web.debug(true);
         //
-        web.ignoring()
-                .antMatchers("/demo");
+        web.ignoring();
     }
 
     @Override
@@ -54,18 +52,14 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
                 .disable();
         //（▲）SessionManagementFilter
         http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .disable();
-        //（▲）ExceptionTranslationFilter
-        http.exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         //（▲）FilterSecurityInterceptor
 //        http.authorizeRequests()
 //               // .antMatchers("/login", "/demo").permitAll()
 //                .anyRequest().authenticated();
         //
         http.addFilter(new RestLoginFilter(authenticationManager()))
-                .addFilterAfter(new RestAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAfter(new RestAuthenticationFilter(), RestLoginFilter.class);
         //
         http.headers()
                 .frameOptions()
@@ -73,11 +67,12 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
                 .cacheControl()
                 .disable();
         //（▲）LogoutFilter
-        http.logout()
-                .disable();
+        http.logout();
         //（▲）AnonymousAuthenticationFilter
-        http.anonymous()
-                .disable();
+        http.anonymous();
+        //（▲）ExceptionTranslationFilter
+        http.exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
     }
 
     @Override

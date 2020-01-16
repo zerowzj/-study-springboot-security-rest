@@ -8,10 +8,16 @@ import java.io.InputStream;
 @Slf4j
 public class JsonUtils {
 
+    /**
+     * Object ==> String
+     */
     public static String toJson(Object obj) {
         return JSON.toJSONString(obj);
     }
 
+    /**
+     * String ==> Object
+     */
     public static <T> T fromJson(String text, Class<T> clazz) {
         T obj;
         try {

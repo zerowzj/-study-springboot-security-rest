@@ -11,6 +11,9 @@ import java.util.Map;
 @Slf4j
 public class ServletUtils {
 
+    /**
+     *
+     */
     public static String getBodyString(HttpServletRequest request) {
         InputStream is = getBodyStream(request);
         return null;
@@ -26,6 +29,9 @@ public class ServletUtils {
         return is;
     }
 
+    /**
+     *
+     */
     public static void sendError(HttpServletResponse response, int statusCode) {
         sendError(response, statusCode, null);
     }
@@ -38,6 +44,9 @@ public class ServletUtils {
         }
     }
 
+    /**
+     *
+     */
     public static void write(HttpServletResponse response, Map<String, Object> result) {
         PrintWriter writer = null;
         try {
