@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public class TokenUtils {
 
-    public static final String TOKEN_HEADER = "ucan-token";
+    public static final String TOKEN_HEADER = "access_token";
 
     public static boolean isLegal(HttpServletRequest request) {
         String token = request.getHeader(TOKEN_HEADER);

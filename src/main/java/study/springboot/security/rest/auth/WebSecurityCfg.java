@@ -47,8 +47,8 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //（▲）SecurityContextPr
-        http.securityContext()
-                .securityContextRepository(null);
+//        http.securityContext()
+//                .securityContextRepository(null);
         //（▲）CsrfFilter
         http.csrf()
                 .disable();
@@ -64,7 +64,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //               // .antMatchers("/login", "/demo").permitAll()
 //                .anyRequest().authenticated();
         //
-        http.addFilterAt(new RestLoginFilter(authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+        http.addFilter(new RestLoginFilter(authenticationManager()))
                 .addFilterAfter(new RestAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         //
         http.headers()
