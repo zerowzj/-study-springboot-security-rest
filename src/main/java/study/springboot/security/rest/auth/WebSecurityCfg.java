@@ -13,7 +13,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import study.springboot.security.rest.auth.entrypoint.JwtAuthenticationEntryPoint;
+import study.springboot.security.rest.auth.entrypoint.RestAuthenticationEntryPoint;
 import study.springboot.security.rest.auth.filter.RestAuthenticationFilter;
 import study.springboot.security.rest.auth.filter.RestLoginFilter;
 
@@ -33,7 +33,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    private RestAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
     @Override
     public void configure(WebSecurity web) throws Exception {
