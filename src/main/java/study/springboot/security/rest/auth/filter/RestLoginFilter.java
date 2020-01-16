@@ -7,6 +7,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import study.springboot.security.rest.auth.details.CustomUserDetails;
 import study.springboot.security.rest.support.Results;
@@ -53,6 +54,7 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
         log.info("======> successfulAuthentication");
+
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String token = "sdfasdfs";
         //
@@ -64,10 +66,11 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException ex) throws IOException, ServletException {
-        log.info("======> unsuccessfulAuthentication");
-        if (ex instanceof BadCredentialsException) {
-            ServletUtils.write(response, Results.error("9999", "用户名或密码错误"));
-            return;
+        log.info("======> unsuccessfulAuthentication", ex);
+        if (ex instanceof UsernameNotFoundException || ex instanceof BadCredentialsException) {
+            ServletUtils.write(response, Results.error("3001", "用户名或密码错误"));
+        } else if (ex instanceof BadCredentialsException) {
+            ServletUtils.write(response, Results.error("9999", "系统异常"));
         }
     }
 }
