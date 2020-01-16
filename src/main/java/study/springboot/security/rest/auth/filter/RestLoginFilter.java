@@ -66,7 +66,9 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
         //
         ServletUtils.write(response, Results.ok());
     }
-
+    /**
+     * 失败认证后处理
+     */
 //    @Override
 //    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
 //                                              AuthenticationException ex) throws IOException, ServletException {
