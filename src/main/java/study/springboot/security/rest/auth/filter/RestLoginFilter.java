@@ -36,6 +36,7 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     public RestLoginFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
+        setFilterProcessesUrl("/getToken");
     }
 
     @Override
@@ -66,14 +67,14 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
         ServletUtils.write(response, Results.ok());
     }
 
-    @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-                                              AuthenticationException ex) throws IOException, ServletException {
-        log.info("======> unsuccessfulAuthentication", ex);
-        if (ex instanceof UsernameNotFoundException || ex instanceof BadCredentialsException) {
-            ServletUtils.write(response, Results.error("3001", "用户名或密码错误"));
-        } else if (ex instanceof BadCredentialsException) {
-            ServletUtils.write(response, Results.error("9999", "系统异常"));
-        }
-    }
+//    @Override
+//    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+//                                              AuthenticationException ex) throws IOException, ServletException {
+//        log.info("======> unsuccessfulAuthentication", ex);
+//        if (ex instanceof UsernameNotFoundException || ex instanceof BadCredentialsException) {
+//            ServletUtils.write(response, Results.error("3001", "用户名或密码错误"));
+//        } else if (ex instanceof BadCredentialsException) {
+//            ServletUtils.write(response, Results.error("9999", "系统异常"));
+//        }
+//    }
 }
