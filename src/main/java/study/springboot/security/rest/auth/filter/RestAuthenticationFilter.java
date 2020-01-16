@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- *
+ * 认证过滤器
  */
 @Slf4j
 public class RestAuthenticationFilter extends OncePerRequestFilter {
