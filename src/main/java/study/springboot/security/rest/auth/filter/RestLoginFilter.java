@@ -50,6 +50,9 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
         return authenticationManager.authenticate(token);
     }
 
+    /**
+     * 成功认证后处理
+     */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
