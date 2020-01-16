@@ -51,8 +51,8 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
         http.csrf()
                 .disable();
         //（▲）SessionManagementFilter
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+//        http.sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         //（▲）FilterSecurityInterceptor
 //        http.authorizeRequests()
 //               // .antMatchers("/login", "/demo").permitAll()
