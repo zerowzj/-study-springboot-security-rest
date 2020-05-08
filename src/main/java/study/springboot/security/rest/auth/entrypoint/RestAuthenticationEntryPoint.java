@@ -6,7 +6,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import study.springboot.security.rest.support.Results;
+import study.springboot.security.rest.support.result.Results;
 import study.springboot.security.rest.support.utils.ServletUtils;
 
 import javax.servlet.ServletException;

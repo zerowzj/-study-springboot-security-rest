@@ -8,6 +8,3 @@ logging:
 spring:
   application:
     name: study-springboot-security-rest
-####################
-#
-####################

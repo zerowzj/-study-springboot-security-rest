@@ -9,11 +9,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import study.springboot.security.rest.auth.entrypoint.RestAuthenticationEntryPoint;
-import study.springboot.security.rest.auth.filter.RestAuthenticationFilter;
+import study.springboot.security.rest.auth.filter.RestAuthFilter;
 import study.springboot.security.rest.auth.filter.RestLoginFilter;
 
 /**
@@ -59,7 +58,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //                .anyRequest().authenticated();
         //
         http.addFilter(new RestLoginFilter(authenticationManager()))
-                .addFilterAfter(new RestAuthenticationFilter(), RestLoginFilter.class);
+                .addFilterAfter(new RestAuthFilter(), RestLoginFilter.class);
         //
         http.headers()
                 .frameOptions()

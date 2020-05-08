@@ -1,4 +1,4 @@
-package study.springboot.security.rest.support;
+package study.springboot.security.rest.support.exception;
 
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;

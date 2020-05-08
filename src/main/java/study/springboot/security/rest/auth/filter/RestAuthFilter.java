@@ -15,7 +15,7 @@ import java.io.IOException;
  * 认证过滤器
  */
 @Slf4j
-public class RestAuthenticationFilter extends OncePerRequestFilter {
+public class RestAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
