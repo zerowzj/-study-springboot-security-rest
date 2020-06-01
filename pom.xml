@@ -59,10 +59,8 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/profiles/${env}</directory>
-            </resource>
-            <resource>
                 <directory>src/main/resources</directory>
+                <filtering>true</filtering>
             </resource>
         </resources>
         <plugins>
@@ -70,7 +68,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <fork>true</fork>
+                    <mainClass>study.springboot.security.token.Startup</mainClass>
                 </configuration>
             </plugin>
         </plugins>
