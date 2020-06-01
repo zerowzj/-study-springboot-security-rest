@@ -1,17 +1,19 @@
-package study.springboot.security.rest.auth.filter;
+package study.springboot.security.token.auth.filter;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import study.springboot.security.rest.auth.details.CustomUserDetails;
-import study.springboot.security.rest.support.result.Results;
-import study.springboot.security.rest.support.utils.JsonUtils;
-import study.springboot.security.rest.support.utils.ServletUtils;
-import study.springboot.security.rest.support.utils.TokenUtils;
+import study.springboot.security.token.auth.details.CustomUserDetails;
+import study.springboot.security.token.support.result.Result;
+import study.springboot.security.token.support.result.Results;
+import study.springboot.security.token.support.utils.JsonUtils;
+import study.springboot.security.token.support.utils.WebUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -22,10 +24,10 @@ import java.io.InputStream;
 
 /**
  * 认证
- * 验证用户名密码正确后，生成一个Token，并将Token返回给客户端
- * 该类继承自UsernamePasswordAuthenticationFilter，重写了其中的2个方法
- * attemptAuthentication ：接收并解析用户凭证。
- * successfulAuthentication ：用户成功登录后，这个方法会被调用，我们在这个方法里生成token。
+ * （1）验证用户名密码正确后，生成一个token并返回给客户端
+ * （2）该类继承自UsernamePasswordAuthenticationFilter，重写了其中的2个方法
+ * attemptAuthentication：接收并解析用户凭证。
+ * successfulAuthentication：用户成功登录后，这个方法会被调用，我们在这个方法里生成token。
  */
 @Slf4j
 public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
@@ -34,13 +36,14 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     public RestLoginFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        setFilterProcessesUrl("/getToken");
+        //
+        setFilterProcessesUrl("/login");
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         log.info("======> attemptAuthentication");
-        InputStream is = ServletUtils.getBodyStream(request);
+        InputStream is = WebUtils.getBodyStream(request);
         CustomUserDetails userDetails = JsonUtils.fromJson(is, CustomUserDetails.class);
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 userDetails.getUsername(),
@@ -56,25 +59,25 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
         log.info("======> successfulAuthentication");
-
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        String token = "sdfasdfs";
+        String token = "666666666";
         //
-        response.addHeader(TokenUtils.TOKEN_HEADER, token);
-        //
-        ServletUtils.write(response, Results.ok());
+        WebUtils.write(response, Results.success());
     }
+
     /**
      * 失败认证后处理
      */
-//    @Override
-//    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
-//                                              AuthenticationException ex) throws IOException, ServletException {
-//        log.info("======> unsuccessfulAuthentication", ex);
-//        if (ex instanceof UsernameNotFoundException || ex instanceof BadCredentialsException) {
-//            ServletUtils.write(response, Results.error("3001", "用户名或密码错误"));
-//        } else if (ex instanceof BadCredentialsException) {
-//            ServletUtils.write(response, Results.error("9999", "系统异常"));
-//        }
-//    }
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                              AuthenticationException ex) throws IOException, ServletException {
+        log.info("======> unsuccessfulAuthentication", ex);
+        Result result;
+        if (ex instanceof UsernameNotFoundException || ex instanceof BadCredentialsException) {
+            result = Results.fail("3001", "用户名或密码错误");
+        } else {
+            result = Results.fail("9999", "系统异常");
+        }
+        WebUtils.write(response, result);
+    }
 }

@@ -1,9 +1,8 @@
-package study.springboot.security.rest.auth.filter;
+package study.springboot.security.token.auth.filter;
 
+import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
-import study.springboot.security.rest.auth.exception.TokenErrorException;
-import study.springboot.security.rest.support.utils.TokenUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -15,17 +14,19 @@ import java.io.IOException;
  * 认证过滤器
  */
 @Slf4j
-public class RestAuthFilter extends OncePerRequestFilter {
+public class TokenAuthFilter extends OncePerRequestFilter {
+
+    private static final String X_TOKEN = "x-token";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
         log.info("======> doFilterInternal");
-        if (!TokenUtils.isLegal(request)) {
+        String token  = request.getHeader(X_TOKEN);
+        if (Strings.isNullOrEmpty(token)) {
 //            chain.doFilter(request, response);
-            throw new TokenErrorException("token错误");
+            throw new IllegalArgumentException("token错误");
         }
-        String token = request.getHeader(TokenUtils.TOKEN_HEADER);
         log.info("token={}", token);
 //        final String auth_token_start = "Bearer ";
 //        if (Strings.isNotEmpty(token) && token.startsWith(auth_token_start)) {

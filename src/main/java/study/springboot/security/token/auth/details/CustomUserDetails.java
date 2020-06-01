@@ -1,4 +1,4 @@
-package study.springboot.security.rest.auth.details;
+package study.springboot.security.token.auth.details;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,11 +13,11 @@ public class CustomUserDetails implements UserDetails {
 
     private String userName;
 
-    private String pwd;
+    private String password;
 
-    public CustomUserDetails(String userName, String pwd){
+    public CustomUserDetails(String userName, String password){
         this.userName = userName;
-        this.pwd = pwd;
+        this.password = password;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.pwd;
+        return this.password;
     }
 
     @Override

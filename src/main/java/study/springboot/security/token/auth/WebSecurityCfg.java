@@ -1,4 +1,4 @@
-package study.springboot.security.rest.auth;
+package study.springboot.security.token.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,9 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import study.springboot.security.rest.auth.entrypoint.RestAuthenticationEntryPoint;
-import study.springboot.security.rest.auth.filter.RestAuthFilter;
-import study.springboot.security.rest.auth.filter.RestLoginFilter;
+import study.springboot.security.token.auth.entrypoint.RestAuthenticationEntryPoint;
+import study.springboot.security.token.auth.filter.RestLoginFilter;
+import study.springboot.security.token.auth.filter.TokenAuthFilter;
 
 /**
  * SpringSecurity的配置
@@ -24,7 +24,7 @@ import study.springboot.security.rest.auth.filter.RestLoginFilter;
 //@EnableGlobalMethodSecurity(prePostEnabled = true) //启用全局方法的安全检查（预处理预授权的属性为true）
 public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
-    public WebSecurityCfg(){
+    public WebSecurityCfg() {
         super(true);
     }
 
@@ -33,6 +33,11 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
+    /**
+     * ====================
+     * <p>
+     * ====================
+     */
     @Override
     public void configure(WebSecurity web) throws Exception {
         //
@@ -41,6 +46,11 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
         web.ignoring();
     }
 
+    /**
+     * ====================
+     * 配置
+     * ====================
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //（▲）SecurityContextPr
@@ -58,7 +68,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //                .anyRequest().authenticated();
         //
         http.addFilter(new RestLoginFilter(authenticationManager()))
-                .addFilterAfter(new RestAuthFilter(), RestLoginFilter.class);
+                .addFilterAfter(new TokenAuthFilter(), RestLoginFilter.class);
         //
         http.headers()
                 .frameOptions()
@@ -74,12 +84,22 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(restAuthenticationEntryPoint);
     }
 
+    /**
+     * ====================
+     * 认证管理器
+     * ====================
+     */
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
 
+    /**
+     * ====================
+     * 认证管理器
+     * ====================
+     */
     @Bean
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {

@@ -1,8 +1,8 @@
-package study.springboot.security.rest;
+package study.springboot.security.token;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import study.springboot.security.rest.support.SpringBootCfg;
+import study.springboot.security.token.support.SpringBootCfg;
 
 public class Startup {
 

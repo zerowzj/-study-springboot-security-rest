@@ -1,6 +1,7 @@
-package study.springboot.security.rest.support.utils;
+package study.springboot.security.token.support.utils;
 
 import lombok.extern.slf4j.Slf4j;
+import study.springboot.security.token.support.result.Result;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,11 +10,8 @@ import java.io.PrintWriter;
 import java.util.Map;
 
 @Slf4j
-public class ServletUtils {
+public class WebUtils {
 
-    /**
-     *
-     */
     public static String getBodyString(HttpServletRequest request) {
         InputStream is = getBodyStream(request);
         return null;
@@ -47,7 +45,7 @@ public class ServletUtils {
     /**
      *
      */
-    public static void write(HttpServletResponse response, Map<String, Object> result) {
+    public static void write(HttpServletResponse response, Result result) {
         PrintWriter writer = null;
         try {
             response.setContentType("application/json; charset=UTF-8");

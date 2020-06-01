@@ -1,7 +1,8 @@
-package study.springboot.security.rest.support.utils;
+package study.springboot.security.token.support.utils;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import study.springboot.security.token.support.result.Result;
 
 import java.io.InputStream;
 

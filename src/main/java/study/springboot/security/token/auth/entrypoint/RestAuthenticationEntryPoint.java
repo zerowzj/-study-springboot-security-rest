@@ -1,4 +1,4 @@
-package study.springboot.security.rest.auth.entrypoint;
+package study.springboot.security.token.auth.entrypoint;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -6,8 +6,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import study.springboot.security.rest.support.result.Results;
-import study.springboot.security.rest.support.utils.ServletUtils;
+import study.springboot.security.token.support.result.Results;
+import study.springboot.security.token.support.utils.WebUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
         } else if (ex instanceof UsernameNotFoundException) {
 
         } else {
-            ServletUtils.write(response, Results.error());
+            WebUtils.write(response,null);
         }
     }
 }
