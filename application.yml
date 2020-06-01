@@ -9,7 +9,7 @@ logging:
 #####################
 spring:
   application:
-    name: study-springboot-security-token
+    name: study-springboot-shiro-token
   main:
     web-application-type: servlet
     banner-mode: 'off'
