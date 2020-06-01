@@ -11,12 +11,12 @@ import java.util.Collection;
 @Getter
 public class CustomUserDetails implements UserDetails {
 
-    private String userName;
+    private String username;
 
     private String password;
 
-    public CustomUserDetails(String userName, String password){
-        this.userName = userName;
+    public CustomUserDetails(String username, String password){
+        this.username = username;
         this.password = password;
     }
 
@@ -32,7 +32,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return this.userName;
+        return this.username;
     }
 
     @Override
