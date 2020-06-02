@@ -14,7 +14,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info(">>>>>> loadUserByUsername");
-        if (Strings.isNullOrEmpty(username) || !"wzj".equalsIgnoreCase(username)) {
+        if (Strings.isNullOrEmpty(username)) {
+            throw new UsernameNotFoundException("未找到用户信息");
+        }
+        if (!"wzj".equalsIgnoreCase(username)) {
             throw new UsernameNotFoundException("未找到用户信息");
         }
         CustomUserDetails userDetails = new CustomUserDetails("", "123");

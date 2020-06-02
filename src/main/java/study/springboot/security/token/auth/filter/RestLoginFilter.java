@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import study.springboot.security.token.auth.LoginRequest;
+import study.springboot.security.token.auth.details.LoginRequest;
 import study.springboot.security.token.auth.details.CustomUserDetails;
 import study.springboot.security.token.support.result.Result;
 import study.springboot.security.token.support.result.Results;
