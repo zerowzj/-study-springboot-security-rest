@@ -23,7 +23,7 @@ public class TokenAuthFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
-        log.info("======> doFilterInternal");
+        log.info(">>>>>> doFilterInternal");
         String token  = request.getHeader(X_TOKEN);
         if (Strings.isNullOrEmpty(token)) {
 //            chain.doFilter(request, response);
