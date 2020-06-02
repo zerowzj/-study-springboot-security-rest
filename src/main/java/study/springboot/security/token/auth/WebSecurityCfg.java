@@ -25,13 +25,10 @@ import study.springboot.security.token.auth.filter.TokenAuthFilter;
 //@EnableGlobalMethodSecurity(prePostEnabled = true) //启用全局方法的安全检查（预处理预授权的属性为true）
 public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
-
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-    @Autowired
-    private RestLoginFilter restLoginFilter;
     @Autowired
     private TokenAuthFilter tokenAuthFilter;
 
@@ -71,7 +68,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //               // .antMatchers("/login", "/demo").permitAll()
 //                .anyRequest().authenticated();
         //（▲）自定义过滤器
-        http.addFilter(restLoginFilter)
+        http.addFilter(new RestLoginFilter(authenticationManager()))
                 .addFilterAfter(tokenAuthFilter, RestLoginFilter.class);
         //（▲）头部
         http.headers()

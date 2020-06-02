@@ -34,14 +34,12 @@ import java.util.Map;
  * successfulAuthentication：用户成功登录后，这个方法会被调用，我们在这个方法里生成token。
  */
 @Slf4j
-@Component
 public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
 
-    @Autowired
     private AuthenticationManager authenticationManager;
 
     public RestLoginFilter(AuthenticationManager authenticationManager) {
-//        this.authenticationManager = authenticationManager;
+        this.authenticationManager = authenticationManager;
         //
 //        setFilterProcessesUrl("/login");
     }
