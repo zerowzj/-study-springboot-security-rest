@@ -3,7 +3,6 @@ package study.springboot.security.token.auth.filter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.stereotype.Component;
+import study.springboot.security.token.auth.LoginRequest;
 import study.springboot.security.token.auth.details.CustomUserDetails;
 import study.springboot.security.token.support.result.Result;
 import study.springboot.security.token.support.result.Results;
@@ -23,7 +22,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -52,11 +50,12 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         log.info(">>>>>> attemptAuthentication");
-        InputStream is = WebUtils.getBodyStream(request);
-        CustomUserDetails userDetails = JsonUtils.fromJson(is, CustomUserDetails.class);
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                userDetails.getUsername(),
-                userDetails.getPassword(),
+        //
+        String text = WebUtils.getBodyString(request);
+        LoginRequest loginRequest = JsonUtils.fromJson(text, LoginRequest.class);
+        //
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                loginRequest.getPassword(),
                 Lists.newArrayList());
         return authenticationManager.authenticate(token);
     }
@@ -71,11 +70,11 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
         log.info(">>>>>> successfulAuthentication");
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        //生成token
         String token = "666666666";
-        //
+        //返回
         Map<String, Object> data = Maps.newHashMap();
         data.put("token", token);
-        //
         WebUtils.write(response, Results.success(data));
     }
 
