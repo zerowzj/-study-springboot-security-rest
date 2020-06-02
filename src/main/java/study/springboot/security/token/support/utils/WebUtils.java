@@ -7,16 +7,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.util.Map;
 
 @Slf4j
 public class WebUtils {
 
+    /**
+     *
+     */
     public static String getBodyString(HttpServletRequest request) {
         InputStream is = getBodyStream(request);
         return null;
     }
 
+    /**
+     *
+     */
     public static InputStream getBodyStream(HttpServletRequest request) {
         InputStream is = null;
         try {
@@ -28,7 +33,7 @@ public class WebUtils {
     }
 
     /**
-     *
+     * 发送状态码
      */
     public static void sendError(HttpServletResponse response, int statusCode) {
         sendError(response, statusCode, null);
@@ -43,7 +48,7 @@ public class WebUtils {
     }
 
     /**
-     *
+     * 输出
      */
     public static void write(HttpServletResponse response, Result result) {
         PrintWriter writer = null;
