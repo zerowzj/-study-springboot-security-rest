@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Component
+@Component("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
@@ -17,7 +17,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (Strings.isNullOrEmpty(username) || !"wzj".equalsIgnoreCase(username)) {
             throw new UsernameNotFoundException("未找到用户信息");
         }
-        CustomUserDetails userDetails = new CustomUserDetails("wzj", "123");
+        CustomUserDetails userDetails = new CustomUserDetails("", "123");
         return userDetails;
     }
 }

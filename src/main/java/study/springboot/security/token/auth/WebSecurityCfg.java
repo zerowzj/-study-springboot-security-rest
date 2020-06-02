@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import study.springboot.security.token.auth.entrypoint.RestAuthenticationEntryPoint;
@@ -24,14 +25,19 @@ import study.springboot.security.token.auth.filter.TokenAuthFilter;
 //@EnableGlobalMethodSecurity(prePostEnabled = true) //启用全局方法的安全检查（预处理预授权的属性为true）
 public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
-    public WebSecurityCfg() {
-        super(true);
-    }
 
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+    @Autowired
+    private RestLoginFilter restLoginFilter;
+    @Autowired
+    private TokenAuthFilter tokenAuthFilter;
+
+    public WebSecurityCfg() {
+        super(true);
+    }
 
     /**
      * ====================
@@ -40,9 +46,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(WebSecurity web) throws Exception {
-        //
         web.debug(true);
-        //
         web.ignoring();
     }
 
@@ -56,37 +60,37 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
         //（▲）SecurityContextPr
 //        http.securityContext()
 //                .securityContextRepository(null);
-        //（▲）CsrfFilter
+        //（▲）跨域，CsrfFilter
         http.csrf()
                 .disable();
-        //（▲）SessionManagementFilter
-//        http.sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        //（▲）Session管理，SessionManagementFilter
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.NEVER);
         //（▲）FilterSecurityInterceptor
 //        http.authorizeRequests()
 //               // .antMatchers("/login", "/demo").permitAll()
 //                .anyRequest().authenticated();
-        //
-        http.addFilter(new RestLoginFilter(authenticationManager()))
-                .addFilterAfter(new TokenAuthFilter(), RestLoginFilter.class);
-        //
+        //（▲）自定义过滤器
+        http.addFilter(restLoginFilter)
+                .addFilterAfter(tokenAuthFilter, RestLoginFilter.class);
+        //（▲）头部
         http.headers()
                 .frameOptions()
                 .sameOrigin()
                 .cacheControl()
                 .disable();
-        //（▲）LogoutFilter
+        //（▲）注销，LogoutFilter
         http.logout();
-        //（▲）AnonymousAuthenticationFilter
+        //（▲）匿名，AnonymousAuthenticationFilter
         http.anonymous();
-        //（▲）ExceptionTranslationFilter
+        //（▲）异常处理，ExceptionTranslationFilter
         http.exceptionHandling()
                 .authenticationEntryPoint(restAuthenticationEntryPoint);
     }
 
     /**
      * ====================
-     * 认证管理器
+     * 认证管理器配置
      * ====================
      */
     @Override
