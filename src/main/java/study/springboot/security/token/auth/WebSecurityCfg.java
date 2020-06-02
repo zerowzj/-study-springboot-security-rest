@@ -58,11 +58,11 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //        http.securityContext()
 //                .securityContextRepository(null);
         //（▲）跨域，CsrfFilter
-        http.csrf()
-                .disable();
+//        http.csrf()
+//                .disable();
         //（▲）Session管理，SessionManagementFilter
-        http.sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.NEVER);
+//        http.sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.NEVER);
         //（▲）FilterSecurityInterceptor
 //        http.authorizeRequests()
 //               // .antMatchers("/login", "/demo").permitAll()
@@ -71,18 +71,18 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
         http.addFilter(new RestLoginFilter(authenticationManager()))
                 .addFilterAfter(tokenAuthFilter, RestLoginFilter.class);
         //（▲）头部
-        http.headers()
-                .frameOptions()
-                .sameOrigin()
-                .cacheControl()
-                .disable();
+//        http.headers()
+//                .frameOptions()
+//                .sameOrigin()
+//                .cacheControl()
+//                .disable();
         //（▲）注销，LogoutFilter
-        http.logout();
-        //（▲）匿名，AnonymousAuthenticationFilter
-        http.anonymous();
-        //（▲）异常处理，ExceptionTranslationFilter
-        http.exceptionHandling()
-                .authenticationEntryPoint(restAuthenticationEntryPoint);
+//        http.logout();
+//        //（▲）匿名，AnonymousAuthenticationFilter
+//        http.anonymous();
+//        //（▲）异常处理，ExceptionTranslationFilter
+//        http.exceptionHandling()
+//                .authenticationEntryPoint(restAuthenticationEntryPoint);
     }
 
     /**

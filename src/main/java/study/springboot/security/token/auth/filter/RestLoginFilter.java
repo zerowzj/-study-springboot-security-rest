@@ -10,8 +10,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import study.springboot.security.token.auth.details.LoginRequest;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import study.springboot.security.token.auth.details.CustomUserDetails;
+import study.springboot.security.token.auth.details.LoginRequest;
 import study.springboot.security.token.support.result.Result;
 import study.springboot.security.token.support.result.Results;
 import study.springboot.security.token.support.utils.JsonUtils;
@@ -22,6 +23,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -38,8 +40,8 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     public RestLoginFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        //
-//        setFilterProcessesUrl("/login");
+        this.setPostOnly(false);
+        this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login"));
     }
 
     /**
@@ -51,7 +53,7 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         log.info(">>>>>> attemptAuthentication");
         //
-        String text = WebUtils.getBodyString(request);
+        InputStream text = WebUtils.getBodyStream(request);
         LoginRequest loginRequest = JsonUtils.fromJson(text, LoginRequest.class);
         //
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
