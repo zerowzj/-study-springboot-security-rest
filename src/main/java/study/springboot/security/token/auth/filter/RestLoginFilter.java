@@ -43,10 +43,10 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Autowired
     private RedisClient redisClient;
-//
-//    private AuthenticationManager authenticationManager;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    public RestLoginFilter(AuthenticationManager authenticationManager) {
+    public RestLoginFilter() {
 //        this.authenticationManager = authenticationManager;
         this.setPostOnly(false);
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login"));

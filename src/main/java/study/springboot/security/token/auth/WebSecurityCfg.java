@@ -31,6 +31,8 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
     private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     @Autowired
     private TokenAuthFilter tokenAuthFilter;
+    @Autowired
+    private RestLoginFilter restLoginFilter;
 
     public WebSecurityCfg() {
         super(true);
@@ -47,7 +49,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         //（▲）自定义过滤器
-        http.addFilter(new RestLoginFilter(authenticationManager()))
+        http.addFilter(restLoginFilter)
                 .addFilterAfter(tokenAuthFilter, RestLoginFilter.class);
 
 
