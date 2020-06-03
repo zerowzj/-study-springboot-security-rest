@@ -12,7 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import study.springboot.security.token.auth.TokenGenerator;
+import study.springboot.security.token.support.utils.TokenGenerator;
 import study.springboot.security.token.auth.details.CustomUserDetails;
 import study.springboot.security.token.support.redis.RedisClient;
 import study.springboot.security.token.support.redis.RedisKeys;

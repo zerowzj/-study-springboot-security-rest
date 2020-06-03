@@ -1,4 +1,4 @@
-package study.springboot.security.token.auth;
+package study.springboot.security.token.support.utils;
 
 import java.util.UUID;
 
