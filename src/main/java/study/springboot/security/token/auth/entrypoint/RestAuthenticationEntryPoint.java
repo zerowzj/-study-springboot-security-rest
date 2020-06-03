@@ -6,7 +6,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import study.springboot.security.token.support.result.Results;
 import study.springboot.security.token.support.utils.WebUtils;
 
 import javax.servlet.ServletException;
@@ -21,7 +20,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException ex) throws IOException, ServletException {
-       log.info("RestAuthenticationEntryPoint");
+       log.info(">>>>>> commence");
         //
         log.info("status={}", response.getStatus());
         response.setStatus(200);

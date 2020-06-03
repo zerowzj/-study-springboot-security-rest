@@ -3,16 +3,17 @@ package study.springboot.security.token.auth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import study.springboot.security.token.auth.filter.RestLoginFilter;
 import study.springboot.security.token.auth.filter.TokenAuthFilter;
@@ -32,6 +33,9 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
     private TokenAuthFilter tokenAuthFilter;
     @Autowired
     private RestLoginFilter restLoginFilter;
+
+    @Autowired
+    private ObjectPostProcessor objectPostProcessor;
 
     public WebSecurityCfg() {
         super(true);
@@ -61,9 +65,8 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
         //（▲）FilterSecurityInterceptor
 //        http.authorizeRequests()
-//                .antMatchers("/login", "/demo").permitAll()
 //                .anyRequest().authenticated()
-//                .withObjectPostProcessor(filterSecurityInterceptorObjectPostProcessor());
+//                .withObjectPostProcessor(objectPostProcessor);
         //（▲）头部
 //        http.headers()
 //                .frameOptions()
@@ -113,19 +116,6 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //        return super.authenticationManagerBean();
 //    }
 
-    /**
-     * 自定义 FilterSecurityInterceptor  ObjectPostProcessor 以替换默认配置达到动态权限的目的
-     *
-     * @return ObjectPostProcessor
-     */
-//    private ObjectPostProcessor<FilterSecurityInterceptor> filterSecurityInterceptorObjectPostProcessor() {
-//        return new ObjectPostProcessor<FilterSecurityInterceptor>() {
-//            @Override
-//            public <O extends FilterSecurityInterceptor> O postProcess(O object) {
-//                object.setAccessDecisionManager(accessDecisionManager);
-//                object.setSecurityMetadataSource(filterInvocationSecurityMetadataSource);
-//                return object;
-//            }
-//        };
-//    }
+
+
 }
