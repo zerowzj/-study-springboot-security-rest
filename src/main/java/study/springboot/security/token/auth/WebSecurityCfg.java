@@ -100,6 +100,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
+
     @Bean
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {
