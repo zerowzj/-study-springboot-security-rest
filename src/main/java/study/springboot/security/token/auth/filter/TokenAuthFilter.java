@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * token认证过滤器
+ * Token认证过滤器
  */
 @Slf4j
 @Component

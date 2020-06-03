@@ -7,9 +7,14 @@ logging:
 #
 spring:
   application:
-    name: study-springboot-shiro-token
+    name: study-springboot-security-token
   main:
     web-application-type: servlet
     banner-mode: 'off'
+  redis:
+    host: 114.67.102.8
+    port: 7379
+    database: 0
+    timeout: 60000
   profiles:
     active: @env@

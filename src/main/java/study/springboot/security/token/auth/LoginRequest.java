@@ -1,4 +1,4 @@
-package study.springboot.security.token.auth.details;
+package study.springboot.security.token.auth;
 
 import lombok.Getter;
 import lombok.Setter;
