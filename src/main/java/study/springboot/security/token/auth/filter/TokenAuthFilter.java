@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import study.springboot.security.token.support.redis.RedisClient;
+import study.springboot.security.token.support.redis.RedisKeys;
 import study.springboot.security.token.support.session.UserInfo;
 import study.springboot.security.token.support.session.UserInfoContext;
 import study.springboot.security.token.support.utils.JsonUtils;
@@ -43,19 +44,20 @@ public class TokenAuthFilter extends OncePerRequestFilter {
             }
             log.info("token={}", token);
             //******************** 获取用户信息 ********************
-            String text = redisClient.get(token);
+            String key = RedisKeys.keyOfToken(token);
+            String text = redisClient.get(key);
             if (Strings.isNullOrEmpty(text)) {
                 throw new IllegalArgumentException("token过期");
             }
             UserInfo userInfo = JsonUtils.fromJson(text, UserInfo.class);
             UserInfoContext.set(userInfo);
-            //根据token获取username
-            String username = "wzj11";
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, token);
-            if (authentication != null) {
-                SecurityContext securityCtx = SecurityContextHolder.getContext();
-                securityCtx.setAuthentication(authentication);
-            }
+//            //根据token获取username
+//            String username = "wzj11";
+//            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, token);
+//            if (authentication != null) {
+//                SecurityContext securityCtx = SecurityContextHolder.getContext();
+//                securityCtx.setAuthentication(authentication);
+//            }
             //
             chain.doFilter(request, response);
         } finally {

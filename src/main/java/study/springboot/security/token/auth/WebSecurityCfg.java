@@ -28,8 +28,6 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-    @Autowired
     private TokenAuthFilter tokenAuthFilter;
     @Autowired
     private RestLoginFilter restLoginFilter;
@@ -111,4 +109,10 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
     }
+
+//    @Bean
+//    @Override
+//    public AuthenticationManager authenticationManagerBean() throws Exception {
+//        return super.authenticationManagerBean();
+//    }
 }

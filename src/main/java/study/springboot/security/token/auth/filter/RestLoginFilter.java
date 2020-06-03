@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
+import study.springboot.security.token.auth.TokenGenerator;
 import study.springboot.security.token.auth.details.CustomUserDetails;
 import study.springboot.security.token.support.redis.RedisClient;
 import study.springboot.security.token.support.redis.RedisKeys;
@@ -43,13 +44,16 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Autowired
     private RedisClient redisClient;
-    @Autowired
-    private AuthenticationManager authenticationManager;
 
     public RestLoginFilter() {
-//        this.authenticationManager = authenticationManager;
         this.setPostOnly(false);
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login"));
+    }
+
+    @Override
+    @Autowired
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        super.setAuthenticationManager(authenticationManager);
     }
 
     /**
@@ -80,11 +84,16 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
         log.info(">>>>>> successfulAuthentication");
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        //******************** 生成token ********************
-        String token = "666666666";
+        //******************** 保存用户信息 ********************
+        //生成token
+        String token = TokenGenerator.createToken();
         String key = RedisKeys.keyOfToken(token);
+        //用户信息
         UserInfo userInfo = new UserInfo();
-        redisClient.set(key, JsonUtils.toJson(userInfo));
+        userInfo.setUserId(900001L);
+        //存储
+        redisClient.set(key, JsonUtils.toJson(userInfo), 60 * 1000);
+
         //返回
         Map<String, Object> data = Maps.newHashMap();
         data.put("token", token);
