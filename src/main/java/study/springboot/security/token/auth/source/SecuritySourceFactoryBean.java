@@ -1,4 +1,4 @@
-package study.springboot.security.token.auth;
+package study.springboot.security.token.auth.source;
 
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.FactoryBean;
@@ -12,10 +12,8 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-
 @Component
-public class FunctionMapFactoryBean implements FactoryBean<LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>>> {
-
+public class SecuritySourceFactoryBean implements FactoryBean<LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>>> {
 
     @Override
     public LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>> getObject() throws Exception {
