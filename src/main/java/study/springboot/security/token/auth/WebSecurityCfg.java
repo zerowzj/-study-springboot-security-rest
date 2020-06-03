@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import study.springboot.security.token.auth.entrypoint.RestAuthenticationEntryPoint;
@@ -37,38 +38,30 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
     /**
      * ====================
-     * <p>
-     * ====================
-     */
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.debug(true);
-        web.ignoring();
-    }
-
-    /**
-     * ====================
      * 配置
      * ====================
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //（▲）Session管理，SessionManagementFilter
+        http.sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        //（▲）自定义过滤器
+        http.addFilter(new RestLoginFilter(authenticationManager()))
+                .addFilterAfter(tokenAuthFilter, RestLoginFilter.class);
+
+
         //（▲）SecurityContextPr
 //        http.securityContext()
 //                .securityContextRepository(null);
         //（▲）跨域，CsrfFilter
 //        http.csrf()
 //                .disable();
-        //（▲）Session管理，SessionManagementFilter
-//        http.sessionManagement()
-//                .sessionCreationPolicy(SessionCreationPolicy.NEVER);
+
         //（▲）FilterSecurityInterceptor
 //        http.authorizeRequests()
 //               // .antMatchers("/login", "/demo").permitAll()
 //                .anyRequest().authenticated();
-        //（▲）自定义过滤器
-        http.addFilter(new RestLoginFilter(authenticationManager()))
-                .addFilterAfter(tokenAuthFilter, RestLoginFilter.class);
         //（▲）头部
 //        http.headers()
 //                .frameOptions()
@@ -82,6 +75,17 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //        //（▲）异常处理，ExceptionTranslationFilter
 //        http.exceptionHandling()
 //                .authenticationEntryPoint(restAuthenticationEntryPoint);
+    }
+
+    /**
+     * ====================
+     * <p>
+     * ====================
+     */
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.debug(true);
+        web.ignoring();
     }
 
     /**

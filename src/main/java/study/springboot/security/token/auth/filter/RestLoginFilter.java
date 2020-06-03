@@ -3,6 +3,7 @@ package study.springboot.security.token.auth.filter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,10 +12,13 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.stereotype.Component;
 import study.springboot.security.token.auth.details.CustomUserDetails;
-import study.springboot.security.token.auth.LoginRequest;
+import study.springboot.security.token.support.redis.RedisClient;
+import study.springboot.security.token.support.redis.RedisKeys;
 import study.springboot.security.token.support.result.Result;
 import study.springboot.security.token.support.result.Results;
+import study.springboot.security.token.support.session.UserInfo;
 import study.springboot.security.token.support.utils.JsonUtils;
 import study.springboot.security.token.support.utils.WebUtils;
 
@@ -34,12 +38,16 @@ import java.util.Map;
  * successfulAuthentication：用户成功登录后，这个方法会被调用，我们在这个方法里生成token。
  */
 @Slf4j
+@Component
 public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
 
-    private AuthenticationManager authenticationManager;
+    @Autowired
+    private RedisClient redisClient;
+//
+//    private AuthenticationManager authenticationManager;
 
     public RestLoginFilter(AuthenticationManager authenticationManager) {
-        this.authenticationManager = authenticationManager;
+//        this.authenticationManager = authenticationManager;
         this.setPostOnly(false);
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login"));
     }
@@ -59,12 +67,12 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
                 loginRequest.getPassword(),
                 Lists.newArrayList());
-        return authenticationManager.authenticate(token);
+        return getAuthenticationManager().authenticate(token);
     }
 
     /**
      * ====================
-     * 认证成功后处理
+     * 认证成功后
      * ====================
      */
     @Override
@@ -72,8 +80,11 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
         log.info(">>>>>> successfulAuthentication");
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-        //生成token
+        //******************** 生成token ********************
         String token = "666666666";
+        String key = RedisKeys.keyOfToken(token);
+        UserInfo userInfo = new UserInfo();
+        redisClient.set(key, JsonUtils.toJson(userInfo));
         //返回
         Map<String, Object> data = Maps.newHashMap();
         data.put("token", token);
@@ -82,7 +93,7 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     /**
      * ====================
-     * 认证失败后处理
+     * 认证失败后
      * ====================
      */
     @Override

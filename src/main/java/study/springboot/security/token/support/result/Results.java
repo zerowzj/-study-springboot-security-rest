@@ -24,7 +24,8 @@ public final class Results {
     }
 
     public static Result fail(String code, String desc) {
-        return new Result(code, desc);
+        Result rst = new Result(code, desc);
+        rst.setData(Maps.newHashMap());
+        return rst;
     }
-
 }
