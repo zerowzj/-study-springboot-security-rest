@@ -3,7 +3,6 @@ package study.springboot.security.token.auth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.access.AccessDecisionManager;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,8 +12,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import study.springboot.security.token.auth.filter.RestLoginFilter;
 import study.springboot.security.token.auth.filter.TokenAuthFilter;
 
@@ -39,6 +36,12 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
     public WebSecurityCfg() {
         super(true);
+    }
+
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.debug(false)
+                .ignoring();
     }
 
     /**
@@ -82,16 +85,6 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //                .authenticationEntryPoint(restAuthenticationEntryPoint);
     }
 
-    /**
-     * ====================
-     * <p>
-     * ====================
-     */
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-        web.debug(true);
-        web.ignoring();
-    }
 
     /**
      * ====================
