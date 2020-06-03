@@ -115,7 +115,4 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //    public AuthenticationManager authenticationManagerBean() throws Exception {
 //        return super.authenticationManagerBean();
 //    }
-
-
-
 }
