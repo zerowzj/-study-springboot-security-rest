@@ -10,4 +10,6 @@ import java.io.Serializable;
 public class UserInfo implements Serializable {
 
     private Long userId;
+
+    private String username;
 }

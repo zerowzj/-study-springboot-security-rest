@@ -12,7 +12,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.stereotype.Component;
 import study.springboot.security.token.auth.TokenGenerator;
 import study.springboot.security.token.auth.details.CustomUserDetails;
 import study.springboot.security.token.support.redis.RedisClient;
@@ -39,7 +38,6 @@ import java.util.Map;
  * successfulAuthentication：用户成功登录后，这个方法会被调用，我们在这个方法里生成token。
  */
 @Slf4j
-@Component
 public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Autowired
@@ -91,6 +89,7 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
         //用户信息
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(900001L);
+        userInfo.setUsername("wangzhenjun3");
         //存储
         redisClient.set(key, JsonUtils.toJson(userInfo), 60 * 1000);
 

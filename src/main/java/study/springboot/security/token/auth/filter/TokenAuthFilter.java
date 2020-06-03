@@ -3,10 +3,6 @@ package study.springboot.security.token.auth.filter;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import study.springboot.security.token.support.redis.RedisClient;
 import study.springboot.security.token.support.redis.RedisKeys;
@@ -24,7 +20,6 @@ import java.io.IOException;
  * Token认证过滤器
  */
 @Slf4j
-@Component
 public class TokenAuthFilter extends OncePerRequestFilter {
 
     private static final String X_TOKEN = "x-token";
@@ -47,7 +42,7 @@ public class TokenAuthFilter extends OncePerRequestFilter {
             String key = RedisKeys.keyOfToken(token);
             String text = redisClient.get(key);
             if (Strings.isNullOrEmpty(text)) {
-                throw new IllegalArgumentException("token过期");
+                throw new IllegalArgumentException("token过期或错误");
             }
             UserInfo userInfo = JsonUtils.fromJson(text, UserInfo.class);
             UserInfoContext.set(userInfo);

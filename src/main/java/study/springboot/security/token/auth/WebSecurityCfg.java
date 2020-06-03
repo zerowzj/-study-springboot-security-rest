@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -12,7 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import study.springboot.security.token.auth.entrypoint.RestAuthenticationEntryPoint;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import study.springboot.security.token.auth.filter.RestLoginFilter;
 import study.springboot.security.token.auth.filter.TokenAuthFilter;
 
@@ -21,7 +22,7 @@ import study.springboot.security.token.auth.filter.TokenAuthFilter;
  * 通过SpringSecurity的配置，将JwtLoginFilter，JwtAuthFilter组合在一起
  */
 @Configuration
-@EnableWebSecurity  //启用web安全检查
+//@EnableWebSecurity  //启用web安全检查
 //@EnableGlobalMethodSecurity(prePostEnabled = true) //启用全局方法的安全检查（预处理预授权的属性为true）
 public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
@@ -60,8 +61,9 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 
         //（▲）FilterSecurityInterceptor
 //        http.authorizeRequests()
-//               // .antMatchers("/login", "/demo").permitAll()
-//                .anyRequest().authenticated();
+//                .antMatchers("/login", "/demo").permitAll()
+//                .anyRequest().authenticated()
+//                .withObjectPostProcessor(filterSecurityInterceptorObjectPostProcessor());
         //（▲）头部
 //        http.headers()
 //                .frameOptions()
@@ -98,12 +100,6 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsService)
                 .passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
-
-    /**
-     * ====================
-     * 认证管理器
-     * ====================
-     */
     @Bean
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {
@@ -114,5 +110,21 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
 //    @Override
 //    public AuthenticationManager authenticationManagerBean() throws Exception {
 //        return super.authenticationManagerBean();
+//    }
+
+    /**
+     * 自定义 FilterSecurityInterceptor  ObjectPostProcessor 以替换默认配置达到动态权限的目的
+     *
+     * @return ObjectPostProcessor
+     */
+//    private ObjectPostProcessor<FilterSecurityInterceptor> filterSecurityInterceptorObjectPostProcessor() {
+//        return new ObjectPostProcessor<FilterSecurityInterceptor>() {
+//            @Override
+//            public <O extends FilterSecurityInterceptor> O postProcess(O object) {
+//                object.setAccessDecisionManager(accessDecisionManager);
+//                object.setSecurityMetadataSource(filterInvocationSecurityMetadataSource);
+//                return object;
+//            }
+//        };
 //    }
 }
