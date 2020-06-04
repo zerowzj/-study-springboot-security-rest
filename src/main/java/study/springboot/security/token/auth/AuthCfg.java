@@ -7,11 +7,10 @@ import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.vote.AffirmativeBased;
 import org.springframework.security.access.vote.RoleVoter;
-import org.springframework.security.config.annotation.ObjectPostProcessor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.access.intercept.DefaultFilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import study.springboot.security.token.auth.details.UserDetailsServiceImpl;
 import study.springboot.security.token.auth.filter.RestLoginFilter;
@@ -32,19 +31,22 @@ public class AuthCfg {
     //用户详情
     @Bean
     public UserDetailsService userDetailsService() {
-        return new UserDetailsServiceImpl();
+        UserDetailsService detailsService = new UserDetailsServiceImpl();
+        return detailsService;
     }
 
     //登录过滤器
     @Bean
     public RestLoginFilter restLoginFilter() {
-        return new RestLoginFilter();
+        RestLoginFilter filter = new RestLoginFilter();
+        return filter;
     }
 
     //Token认证过滤器
     @Bean
     public TokenAuthFilter tokenAuthFilter() {
-        return new TokenAuthFilter();
+        TokenAuthFilter filter = new TokenAuthFilter();
+        return filter;
     }
 
     /**
