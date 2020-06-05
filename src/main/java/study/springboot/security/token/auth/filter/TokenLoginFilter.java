@@ -12,14 +12,14 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import study.springboot.security.token.support.utils.TokenGenerator;
-import study.springboot.security.token.auth.details.CustomUserDetails;
+import study.springboot.security.token.auth.details.TokenUserDetails;
 import study.springboot.security.token.support.redis.RedisClient;
 import study.springboot.security.token.support.redis.RedisKeys;
 import study.springboot.security.token.support.result.Result;
 import study.springboot.security.token.support.result.Results;
 import study.springboot.security.token.support.session.UserInfo;
 import study.springboot.security.token.support.utils.JsonUtils;
+import study.springboot.security.token.support.utils.TokenGenerator;
 import study.springboot.security.token.support.utils.WebUtils;
 
 import javax.servlet.FilterChain;
@@ -38,12 +38,12 @@ import java.util.Map;
  * successfulAuthentication：用户成功登录后，这个方法会被调用，我们在这个方法里生成token。
  */
 @Slf4j
-public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
+public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     @Autowired
     private RedisClient redisClient;
 
-    public RestLoginFilter() {
+    public TokenLoginFilter() {
         this.setPostOnly(false);
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/login"));
     }
@@ -74,14 +74,14 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     /**
      * ====================
-     * 认证成功后
+     * 认证成功
      * ====================
      */
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
         log.info(">>>>>> successfulAuthentication");
-        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        TokenUserDetails userDetails = (TokenUserDetails) authentication.getPrincipal();
         //******************** 保存用户信息 ********************
         //生成token
         String token = TokenGenerator.createToken();
@@ -101,7 +101,7 @@ public class RestLoginFilter extends UsernamePasswordAuthenticationFilter {
 
     /**
      * ====================
-     * 认证失败后
+     * 认证失败
      * ====================
      */
     @Override

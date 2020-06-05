@@ -9,13 +9,13 @@ import java.util.Collection;
 
 @Setter
 @Getter
-public class CustomUserDetails implements UserDetails {
+public class TokenUserDetails implements UserDetails {
 
     private String username;
 
     private String password;
 
-    public CustomUserDetails(String username, String password){
+    public TokenUserDetails(String username, String password){
         this.username = username;
         this.password = password;
     }

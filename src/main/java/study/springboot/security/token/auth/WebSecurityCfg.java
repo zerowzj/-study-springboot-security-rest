@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
-import study.springboot.security.token.auth.filter.RestLoginFilter;
+import study.springboot.security.token.auth.filter.TokenLoginFilter;
 import study.springboot.security.token.auth.filter.TokenAuthFilter;
 
 /**
@@ -29,7 +29,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
     @Autowired
     private TokenAuthFilter tokenAuthFilter;
     @Autowired
-    private RestLoginFilter restLoginFilter;
+    private TokenLoginFilter tokenLoginFilter;
 
     @Autowired
     private ObjectPostProcessor objectPostProcessor;
@@ -55,8 +55,8 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
         http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         //（▲）自定义过滤器
-        http.addFilter(restLoginFilter)
-                .addFilterAfter(tokenAuthFilter, RestLoginFilter.class);
+        http.addFilter(tokenLoginFilter)
+                .addFilterAfter(tokenAuthFilter, TokenLoginFilter.class);
 
 
         //（▲）SecurityContextPr

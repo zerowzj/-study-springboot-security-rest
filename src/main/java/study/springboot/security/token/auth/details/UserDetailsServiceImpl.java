@@ -18,7 +18,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (!"wzj".equalsIgnoreCase(username)) {
             throw new UsernameNotFoundException("未找到用户信息");
         }
-        CustomUserDetails userDetails = new CustomUserDetails("wzj", "123");
+        TokenUserDetails userDetails = new TokenUserDetails("wzj", "123");
         return userDetails;
     }
 }
