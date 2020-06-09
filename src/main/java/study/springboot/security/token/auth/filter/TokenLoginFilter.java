@@ -93,7 +93,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         //用户信息
         UserInfo userInfo = new UserInfo();
         userInfo.setUserId(900001L);
-        userInfo.setUsername("wangzhenjun3");
+        userInfo.setUsername("王振军");
         //存储
         redisClient.set(key, JsonUtils.toJson(userInfo), 60 * 1000);
 
