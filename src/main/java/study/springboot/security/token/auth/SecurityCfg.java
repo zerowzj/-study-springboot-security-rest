@@ -22,7 +22,7 @@ import study.springboot.security.token.auth.filter.TokenAuthFilter;
 @Configuration
 //@EnableWebSecurity  //启用web安全检查
 //@EnableGlobalMethodSecurity(prePostEnabled = true) //启用全局方法的安全检查（预处理预授权的属性为true）
-public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
+public class SecurityCfg extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -34,7 +34,7 @@ public class WebSecurityCfg extends WebSecurityConfigurerAdapter {
     @Autowired
     private ObjectPostProcessor objectPostProcessor;
 
-    public WebSecurityCfg() {
+    public SecurityCfg() {
         super(true);
     }
 
