@@ -83,7 +83,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
         log.info(">>>>>> 认证成功");
-        //******************** <1>. ********************
+        //******************** <1>.获取用户详情 ********************
         TokenUserDetails userDetails = (TokenUserDetails) authentication.getPrincipal();
 
         //******************** <2>.保存用户信息 ********************
@@ -98,9 +98,9 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         redisClient.set(key, JsonUtils.toJson(userInfo), 60 * 1000);
 
         //******************** <3>.设置Cookie ********************
-        response.addCookie(CookieUtils.newCookie("", token));
+        response.addCookie(CookieUtils.newCookie("jwt", token));
 
-        //返回
+        //******************** <4>.返回 ********************
         WebUtils.write(response, Results.success());
     }
 

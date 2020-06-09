@@ -8,6 +8,7 @@ import study.springboot.security.token.support.redis.RedisClient;
 import study.springboot.security.token.support.redis.RedisKeys;
 import study.springboot.security.token.support.session.UserInfo;
 import study.springboot.security.token.support.session.UserInfoContext;
+import study.springboot.security.token.support.utils.CookieUtils;
 import study.springboot.security.token.support.utils.JsonUtils;
 
 import javax.servlet.FilterChain;
@@ -22,7 +23,7 @@ import java.io.IOException;
 @Slf4j
 public class TokenAuthFilter extends OncePerRequestFilter {
 
-    private static final String X_TOKEN = "x-token";
+    private static final String C_JWT = "jwt";
 
     @Autowired
     private RedisClient redisClient;
@@ -32,13 +33,15 @@ public class TokenAuthFilter extends OncePerRequestFilter {
                                     FilterChain chain) throws ServletException, IOException {
         log.info(">>>>>> doFilterInternal");
         try {
-            //******************** 验证token ********************
-            String token = request.getHeader(X_TOKEN);
+
+            //******************** <1>.验证token ********************
+            String token = CookieUtils.getValue(request, C_JWT);
             if (Strings.isNullOrEmpty(token)) {
                 throw new IllegalArgumentException("token为空");
             }
             log.info("token={}", token);
-            //******************** 获取用户信息 ********************
+
+            //******************** <2>.获取用户信息 ********************
             String key = RedisKeys.keyOfToken(token);
             String text = redisClient.get(key);
             if (Strings.isNullOrEmpty(text)) {
