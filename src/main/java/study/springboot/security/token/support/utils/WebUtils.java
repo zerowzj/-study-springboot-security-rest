@@ -14,7 +14,7 @@ public class WebUtils {
     /**
      *
      */
-    public static String getBodyString(HttpServletRequest request) {
+    public static String getBodyText(HttpServletRequest request) {
         InputStream is = getBodyStream(request);
         return null;
     }

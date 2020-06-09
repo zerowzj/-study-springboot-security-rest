@@ -1,7 +1,6 @@
 package study.springboot.security.token.auth.filter;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,6 +17,7 @@ import study.springboot.security.token.support.redis.RedisKeys;
 import study.springboot.security.token.support.result.Result;
 import study.springboot.security.token.support.result.Results;
 import study.springboot.security.token.support.session.UserInfo;
+import study.springboot.security.token.support.utils.CookieUtils;
 import study.springboot.security.token.support.utils.JsonUtils;
 import study.springboot.security.token.support.utils.TokenGenerator;
 import study.springboot.security.token.support.utils.WebUtils;
@@ -28,7 +28,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 
 /**
  * 认证
@@ -61,13 +60,16 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
      */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        log.info(">>>>>> attemptAuthentication");
-        //
+        log.info(">>>>>> 尝试认证");
+        //******************* <1>. ********************
         InputStream text = WebUtils.getBodyStream(request);
         LoginRequest loginRequest = JsonUtils.fromJson(text, LoginRequest.class);
-        //
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
-                loginRequest.getPassword(),
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
+
+        //******************* <2>. ********************
+        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username,
+                password,
                 Lists.newArrayList());
         return getAuthenticationManager().authenticate(token);
     }
@@ -80,9 +82,11 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authentication) throws IOException, ServletException {
-        log.info(">>>>>> successfulAuthentication");
+        log.info(">>>>>> 认证成功");
+        //******************** <1>. ********************
         TokenUserDetails userDetails = (TokenUserDetails) authentication.getPrincipal();
-        //******************** 保存用户信息 ********************
+
+        //******************** <2>.保存用户信息 ********************
         //生成token
         String token = TokenGenerator.createToken();
         String key = RedisKeys.keyOfToken(token);
@@ -93,10 +97,11 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         //存储
         redisClient.set(key, JsonUtils.toJson(userInfo), 60 * 1000);
 
+        //******************** <3>.设置Cookie ********************
+        response.addCookie(CookieUtils.newCookie("", token));
+
         //返回
-        Map<String, Object> data = Maps.newHashMap();
-        data.put("token", token);
-        WebUtils.write(response, Results.success(data));
+        WebUtils.write(response, Results.success());
     }
 
     /**
@@ -107,7 +112,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                               AuthenticationException ex) throws IOException, ServletException {
-        log.info(">>>>>> unsuccessfulAuthentication", ex);
+        log.info(">>>>>> 认证失败", ex);
         Result result;
         if (ex instanceof UsernameNotFoundException ||
                 ex instanceof BadCredentialsException) {
