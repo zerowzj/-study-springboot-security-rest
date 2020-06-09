@@ -23,7 +23,7 @@ import java.io.IOException;
 @Slf4j
 public class TokenAuthFilter extends OncePerRequestFilter {
 
-    private static final String C_JWT = "jwt";
+    private static final String C_TOKEN = "token";
 
     @Autowired
     private RedisClient redisClient;
@@ -35,7 +35,7 @@ public class TokenAuthFilter extends OncePerRequestFilter {
         try {
 
             //******************** <1>.验证token ********************
-            String token = CookieUtils.getValue(request, C_JWT);
+            String token = CookieUtils.getValue(request, C_TOKEN);
             if (Strings.isNullOrEmpty(token)) {
                 throw new IllegalArgumentException("token为空");
             }

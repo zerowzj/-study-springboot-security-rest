@@ -98,7 +98,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         redisClient.set(key, JsonUtils.toJson(userInfo), 60 * 1000);
 
         //******************** <3>.设置Cookie ********************
-        response.addCookie(CookieUtils.newCookie("jwt", token));
+        response.addCookie(CookieUtils.newCookie("token", token));
 
         //******************** <4>.返回 ********************
         WebUtils.write(response, Results.success());
